@@ -1,0 +1,37 @@
+{
+  "name": "funny",
+  "version": "1.0.0",
+  "description": "Some funny works",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yilene/funny.git"
+  },
+  "keywords": [
+    "css3",
+    "html5"
+  ],
+  "author": "Ilene",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yilene/funny/issues"
+  },
+  "homepage": "https://github.com/Yilene/funny#readme",
+  "dependencies": {
+    "autoprefixer": "^6.4.1",
+    "browser-sync": "^2.15.0",
+    "fs": "0.0.1-security",
+    "gulp": "^3.9.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-postcss": "^6.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tap": "^0.1.3",
+    "path": "^0.12.7",
+    "yargs": "^5.0.0"
+  }
+}
