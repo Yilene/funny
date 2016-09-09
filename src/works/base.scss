@@ -1,0 +1,27 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+html{
+  font: 10px/1 'Microsoft YaHei', Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+}
+
+
+@mixin clearfix{
+  &:before, &:after{
+    content: "";
+    display: table;
+  }
+  &:after{
+    clear: both;
+    zoom: 1;
+  }
+}
+
+.clearfix{
+  @include clearfix;
+}
+
+
+$color-bg: #f1f1f1

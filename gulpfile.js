@@ -9,43 +9,45 @@ var yargs = require("yargs").argv,
     rename = require("gulp-rename"),
     sourcemaps = require("gulp-sourcemaps"),
     tap = require("gulp-tap"),
-    autoprefixer = require("autoprefixer");
+    autoprefixer = require("autoprefixer"),
+    gutil = require("gulp-util"),
+    webpack = require("webpack"),
+    webpackConfig = require("./webpack.config");
 
 var option = {base: 'src'};
 var dist = __dirname + '/dist';
 
-gulp.task('build:style', function (){
-    gulp.src('src/style/style.scss', option)
-        .pipe(sourcemaps.init())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(postcss([autoprefixer({browsers: ['last 2 versions','> 1%']})]))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(dist))
-        .pipe(browserSync.reload({stream: true}))
+gulp.task("webpack", function(callback) {
+    var myConfig = Object.create(webpackConfig);
+    webpack(
+        myConfig
+        , function(err, stats) {
+            if(err) throw new gutil.PluginError("webpack", err);
+            gutil.log("[webpack]", stats.toString({
+                // output options
+            }));
+            callback();
+        });
+});
+
+gulp.task('style', function (){
+    gulp.src('dist/style.css', option)
         .pipe(nano())
         .pipe(rename(function (path) {
             path.basename += '.min';
         }))
-        .pipe(gulp.dest(dist));
-});
-
-gulp.task('build:works:assets', function (){
-    gulp.src('src/works/**/*.?(png|jpg|gif|js)', option)
         .pipe(gulp.dest(dist))
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('build:works:style', function (){
-    gulp.src('src/works/works.scss', option)
-        .pipe(sass().on('error', sass.logError))
-        .pipe(postcss([autoprefixer({browsers: ['last 2 versions','> 1%']})]))
-        .pipe(nano())
+gulp.task('assets', function (){
+    gulp.src('src/assets/**/*.?(png|jpg|gif|js)', option)
         .pipe(gulp.dest(dist))
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('build:works:html', function (){
-    gulp.src('src/works/index.html', option)
+gulp.task('html', function (){
+    gulp.src('src/index.html', option)
         .pipe(tap(function (file){
             var dir = path.dirname(file.path);
             var contents = file.contents.toString();
@@ -61,15 +63,13 @@ gulp.task('build:works:html', function (){
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('build:works', ['build:works:assets', 'build:works:style', 'build:works:html']);
+gulp.task('build', ['html', 'assets', 'webpack', 'style']);
 
-gulp.task('release', ['build:style', 'build:works']);
-
-gulp.task('watch', ['release'], function () {
-    gulp.watch('src/style/**/*', ['build:style']);
-    gulp.watch('src/works/works.less', ['build:example:style']);
-    gulp.watch('src/works/**/*.?(png|jpg|gif|js)', ['build:example:assets']);
-    gulp.watch('src/**/*.html', ['build:works:html']);
+gulp.task('watch', ['build'], function () {
+    gulp.watch('src/works/**/*.scss', ['webpack', 'style']);
+    gulp.watch('src/assets/**/*.?(png|jpg|gif|js)', ['assets','webpack']);
+    gulp.watch('src/**/*.html', ['html']);
+    gulp.watch('src/entry.js', ['webpack','style'])
 });
 
 gulp.task('server', function () {
@@ -85,7 +85,7 @@ gulp.task('server', function () {
             }
         },
         port: yargs.p,
-        startPath: '/works'
+        startPath: ''
     });
 });
 
@@ -93,7 +93,7 @@ gulp.task('server', function () {
 //  -w: 实时监听
 //  -s: 启动服务器
 //  -p: 服务器启动端口，默认8080
-gulp.task('default', ['release'], function () {
+gulp.task('default', ['build'], function () {
     if (yargs.s) {
         gulp.start('server');
     }
