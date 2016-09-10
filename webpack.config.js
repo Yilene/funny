@@ -11,10 +11,6 @@ module.exports = {
     module: {
         loaders: [
             {
-                test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style','css!sass!postcss')
-            },
-            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 loader: "babel"
@@ -24,11 +20,5 @@ module.exports = {
                 loader: "url?limit=8192"
             }
         ]
-    },
-    postcss: function () {
-        return [autoprefixer({browsers: ['last 2 versions','> 1%']})];
-    },
-    plugins: [
-        new ExtractTextPlugin("style.css", {allChunks: true})
-    ]
+    }
 };

@@ -1,7 +1,6 @@
-@import "../base";
 .work-item{
   width: 100%;
-  background-color: $color-bg;
+  background-color: #f1f1f1;
   .item-content{
     width: 1024px;
     margin: 0 auto;
@@ -9,7 +8,7 @@
     h1{
       float: left;
       margin-top: 160px;
-      font-size: 2rem;
+      font-size: 24px;
       font-weight: normal;
       color: #888;
     }
@@ -40,12 +39,14 @@
       }
     }
   }
+
   &:nth-child(2){
     background-color: #FDE0A5;
     h1{
       color: #fff;
     }
   }
+
 }
 
 .card{
@@ -81,13 +82,55 @@
     text-decoration: none;
     color: #000;
     h2{
-      margin: 100px 0 20px;
-      font-size: 2rem;
+      margin: 100px 0 30px;
+      font-size: 18px;
       font-weight: lighter;
     }
     p{
+      margin: 0 60px;
+      line-height: 26px;
       text-align: center;
-      font-size: 1.6rem;
+      font-size: 14px;
     }
   }
+}
+
+.container{
+  .pixelart{
+    opacity: 1;
+    transition: opacity 3s;
+  }
+}
+
+.container{
+  .home.enter{
+    opacity: 0;
+    transition: opacity 2s ease-in;
+  }
+
+  .home{
+    opacity: 1;
+    transition: opacity 2s ease-in;
+  }
+}
+
+.container{
+  .enter{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 2s ease-in;
+  }
+
+  .leave{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 2s ease-in;
+  }
+
 }

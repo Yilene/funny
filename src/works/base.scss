@@ -7,6 +7,10 @@ html{
   font: 10px/1 'Microsoft YaHei', Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
 }
 
+body{
+  background-color: #f1f1f1;
+}
+
 
 @mixin clearfix{
   &:before, &:after{
@@ -23,5 +27,3 @@ html{
   @include clearfix;
 }
 
-
-$color-bg: #f1f1f1

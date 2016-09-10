@@ -7,6 +7,7 @@ var yargs = require("yargs").argv,
     postcss = require("gulp-postcss"),
     nano = require("gulp-cssnano"),
     rename = require("gulp-rename"),
+    concat = require("gulp-concat")
     sourcemaps = require("gulp-sourcemaps"),
     tap = require("gulp-tap"),
     autoprefixer = require("autoprefixer"),
@@ -31,7 +32,23 @@ gulp.task("webpack", function(callback) {
 });
 
 gulp.task('style', function (){
-    gulp.src('dist/style.css', option)
+    gulp.src('src/works/**/*.scss', option)
+        .pipe(sourcemaps.init())
+        .pipe(concat('style.scss'))
+        .pipe(sass().on('error', sass.logError))
+        .pipe(postcss([autoprefixer({browsers: ['last 2 versions','> 1%']})]))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(dist))
+        .pipe(browserSync.reload({stream: true}))
+        .pipe(nano())
+        .pipe(rename(function (path) {
+            path.basename += '.min';
+        }))
+        .pipe(gulp.dest(dist));
+});
+
+gulp.task('style1', function (){
+    gulp.src('src/works/**/*.scss', option)
         .pipe(nano())
         .pipe(rename(function (path) {
             path.basename += '.min';
@@ -39,6 +56,7 @@ gulp.task('style', function (){
         .pipe(gulp.dest(dist))
         .pipe(browserSync.reload({stream: true}));
 });
+
 
 gulp.task('assets', function (){
     gulp.src('src/assets/**/*.?(png|jpg|gif|js)', option)
@@ -66,10 +84,10 @@ gulp.task('html', function (){
 gulp.task('build', ['html', 'assets', 'webpack', 'style']);
 
 gulp.task('watch', ['build'], function () {
-    gulp.watch('src/works/**/*.scss', ['webpack', 'style']);
+    gulp.watch('src/works/**/*.scss', ['style']);
     gulp.watch('src/assets/**/*.?(png|jpg|gif|js)', ['assets','webpack']);
-    gulp.watch('src/**/*.html', ['html']);
-    gulp.watch('src/entry.js', ['webpack','style'])
+    gulp.watch('src/**/*.html', ['html','webpack']);
+    gulp.watch('src/entry.js', ['webpack'])
 });
 
 gulp.task('server', function () {
